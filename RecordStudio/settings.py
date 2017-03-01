@@ -1,5 +1,5 @@
 import os
-from emailer import settings
+from email_sender import settings
 
 EMAIL_BACKEND = settings.EMAIL_BACKEND
 EMAIL_USE_TLS = settings.EMAIL_USE_TLS
@@ -36,11 +36,16 @@ INSTALLED_APPS = [
     'django_extensions',
     'bookings',
     'accounts',
-    'emailer',
-    'staff'
+    'email_sender',
+    'staff',
+    'about',
+
+    'django_hosts',
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'RecordStudio.urls'
@@ -120,3 +127,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/home/RecordStudio/RecordStudio/www/static'
 # Пример вывода: 16 сентября 2012
 DATE_FORMAT = 'd E Y'
+
+ROOT_HOSTCONF = 'RecordStudio.hosts'
+DEFAULT_HOST = 'main_host'

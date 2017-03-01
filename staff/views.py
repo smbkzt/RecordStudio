@@ -11,7 +11,7 @@ from django.views import View
 from accounts.forms import SoundmanCreationForm
 from accounts.views import ForgetPasswordView
 from bookings.models import Record, Booking
-from emailer.views import send_email
+from email_sender.views import send_email
 
 
 class StaffLoginPageView(View):

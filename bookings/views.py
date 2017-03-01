@@ -10,7 +10,7 @@ from django.utils.dateparse import parse_date
 from django.utils.dateparse import parse_time
 
 from bookings.models import Booking, Schedule, Record
-from emailer.views import send_email
+from email_sender.views import send_email
 
 
 def home(request):

@@ -52,7 +52,7 @@ def send_email(**kwargs):
 
     try:
         mail.send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
-        return render_to_response("emailer/successful_page.html", args)
+        return render_to_response("email_sender/successful_page.html", args)
     except Exception:
         args['email_error'] = "Ошибка при отправке письма на email"
-        return render_to_response("emailer/successful_page.html", args)
+        return render_to_response("email_sender/successful_page.html", args)
