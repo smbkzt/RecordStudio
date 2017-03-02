@@ -4,3 +4,4 @@ from django.http import HttpResponse
 
 def home(request):
     return HttpResponse("About page")
+    # This is test example of django-hosts

@@ -1,5 +1,8 @@
 import os
 from email_sender import settings
+from django.contrib.messages import constants as message_constants
+
+MESSAGE_LEVEL = message_constants.DEBUG
 
 EMAIL_BACKEND = settings.EMAIL_BACKEND
 EMAIL_USE_TLS = settings.EMAIL_USE_TLS

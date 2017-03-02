@@ -3,6 +3,7 @@ import string
 from datetime import datetime, timezone, timedelta
 
 from django.contrib import auth
+from django.contrib import messages
 from django.contrib.auth import authenticate, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
@@ -226,7 +227,6 @@ class PasswordChangeView(View):
     def get(self, request):
         args = {}
         args.update(csrf(request))
-        args['user'] = request.user
         return render(request, "accounts/settings.html", args)
 
     def post(self, request):
@@ -244,11 +244,10 @@ class PasswordChangeView(View):
                 request.user.save()
                 form.save()
                 update_session_auth_hash(request, form.user)
-                args['success'] = 'Success'
+                messages.success(request, 'Ваш пароль был успешно изменен.')
             else:
-                args['error'] = form.errors
+                messages.error(request, form.errors)
 
-            args['user'] = request.user
             return render(request, "accounts/settings.html", args)
 
         if request.user.check_password(request.POST["old_password"]):
@@ -256,9 +255,8 @@ class PasswordChangeView(View):
             request.user.last_name = request.POST["last_name"]
             request.user.email = request.POST["email"]
             request.user.save()
-            args['success'] = 'Success'
+            messages.success(request, 'Пользовательские данные изменены успешно.')
         else:
-            args['error'] = "Неверный пароль"
+            messages.error(request, "Неверный пароль!")
 
-        args['user'] = request.user
         return render(request, "accounts/settings.html", args)
