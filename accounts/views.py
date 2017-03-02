@@ -23,6 +23,10 @@ from bookings.models import Booking
 from email_sender.views import send_email
 
 
+def password_generating_method(size=8, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
 class ForgetPasswordView(View):
     def get(self, request):
         return render(request, 'accounts/forget.html')
@@ -35,7 +39,7 @@ class ForgetPasswordView(View):
             validate_email(email.rstrip())
             try:
                 user = User.objects.get(email=email)
-                __new_password = self.password_generating_method()
+                __new_password = password_generating_method()
                 user.set_password(__new_password)
                 user.save()
                 return send_email(type='forgetPassword', email=email, username=user.username, password=__new_password)
@@ -47,9 +51,6 @@ class ForgetPasswordView(View):
         except ValidationError:
             args['validation'] = "Неверный формат почтового адреса"
             return render(request, "accounts/forget.html", args)
-
-    def password_generating_method(self, size=8, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
-        return ''.join(random.choice(chars) for _ in range(size))
 
 
 class UserAuthenticationView(View):

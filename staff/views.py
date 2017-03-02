@@ -9,7 +9,7 @@ from django.template.context_processors import csrf
 from django.views import View
 
 from accounts.forms import SoundmanCreationForm
-from accounts.views import ForgetPasswordView
+from accounts.views import password_generating_method
 from bookings.models import Record, Booking
 from email_sender.views import send_email
 
@@ -91,8 +91,7 @@ class SoundmanAddView(View):
                 last_name=new_user_form.cleaned_data['last_name'],
                 email=new_user_form.cleaned_data['email'],
             )
-            password = ForgetPasswordView()
-            __new_password_of_soundman = password.password_generating_method()
+            __new_password_of_soundman = password_generating_method()
             new_user.set_password(__new_password_of_soundman)
             new_user.is_active = True
             new_user.save()
