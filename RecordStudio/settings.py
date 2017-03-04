@@ -1,9 +1,11 @@
-import os
+from decouple import config
+from unipath import Path
+import dj_database_url
+
 from email_sender import settings
 from django.contrib.messages import constants as message_constants
 
 MESSAGE_LEVEL = message_constants.DEBUG
-
 EMAIL_BACKEND = settings.EMAIL_BACKEND
 EMAIL_USE_TLS = settings.EMAIL_USE_TLS
 EMAIL_HOST = settings.EMAIL_HOST
@@ -13,21 +15,11 @@ DEFAULT_FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
 SERVER_EMAIL = settings.SERVER_EMAIL
 EMAIL_HOST_PASSWORD = settings.EMAIL_HOST_PASSWORD
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'v4j!_(wn9=0i9@qf)c#)bc9@z4p8$+xxkct27jl0f%8jt^*j9*'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+PROJECT_DIR = Path(__file__).parent
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,7 +34,6 @@ INSTALLED_APPS = [
     'email_sender',
     'staff',
     'about',
-
     'django_hosts',
 ]
 
@@ -65,7 +56,7 @@ ROOT_URLCONF = 'RecordStudio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [PROJECT_DIR.child('templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,18 +71,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'RecordStudio.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -125,11 +109,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/RecordStudio/RecordStudio/www/static'
+
 # Пример вывода: 16 сентября 2012
 DATE_FORMAT = 'd E Y'
 
+# Многоуровневый домен
 ROOT_HOSTCONF = 'RecordStudio.hosts'
 DEFAULT_HOST = 'main_host'
